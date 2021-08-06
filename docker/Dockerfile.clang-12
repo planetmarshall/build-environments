@@ -45,6 +45,7 @@ RUN apt-get update && \
         libsqlite3-dev \
         libssl-dev \
         libstdc++-8-dev \
+        libxml2-dev \
         lld-${CLANG_VERSION} \
         lldb-${CLANG_VERSION} \
         m4 \
