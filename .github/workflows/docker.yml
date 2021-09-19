@@ -31,6 +31,7 @@ jobs:
       with:
         context: docker
         file: docker/build-utils.Dockerfile
+        push: True
         tags: | 
           ${{ env.USERNAME }}/build-utils:latest
           ${{ env.USERNAME }}/build-utils:${{ github.run_number }}
@@ -41,6 +42,7 @@ jobs:
       with:
         context: docker
         file: docker/hdf5.Dockerfile
+        push: True
         tags: | 
           ${{ env.USERNAME }}/hdf5:latest
           ${{ env.USERNAME }}/hdf5:${{ github.run_number }}
