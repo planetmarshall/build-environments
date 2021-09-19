@@ -18,50 +18,28 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-    - name: Build and export to Docker for testing
-      id: docker_build
+    - name: Build and push build tools image
       uses: docker/build-push-action@v2
       with:
         context: docker
         file: docker/build-utils.Dockerfile
-        load: true
-        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:test
-
-    - name: Test
-      run: |
-        docker run --rm ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:test cmake --version
-
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      if: ${{ github.ref == 'refs/heads/main' }}
-      with:
-        context: docker
-        file: docker/build-utils.Dockerfile
-        push: true
+        push: ${{ github.ref == 'refs/heads/main' }}
         tags: | 
           ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:latest
           ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:${{ github.run_id }}
 
-    - name: Build and export to Docker for testing
+
+    - name: Build and push hdf5 image
       uses: docker/build-push-action@v2
       with:
         context: docker
         file: docker/hdf5.Dockerfile
-        load: true
-        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:test
-
-    - name: Test
-      run: |
-        docker run --rm ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:test h5dump --version
-
-    - name: Build and push
-      uses: docker/build-push-action@v2
-      if: ${{ github.ref == 'refs/heads/main' }}
-      with:
-        context: docker
-        file: docker/hdf5.Dockerfile
-        push: true
+        push: ${{ github.ref == 'refs/heads/main' }}
         tags: | 
           ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:latest
           ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:${{ github.run_id }}
+
+    - name: Test hdf5 image
+      run: |
+        docker run --rm ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:latest h5dump --version
 
