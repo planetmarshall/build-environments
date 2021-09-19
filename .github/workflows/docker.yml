@@ -28,6 +28,7 @@ jobs:
       with:
         context: docker
         file: docker/build-utils.Dockerfile
+        load: true
         push: ${{ github.ref == 'refs/heads/main' }}
         tags: | 
           ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:latest
@@ -39,6 +40,7 @@ jobs:
       with:
         context: docker
         file: docker/hdf5.Dockerfile
+        load: true
         push: ${{ github.ref == 'refs/heads/main' }}
         tags: | 
           ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:latest
