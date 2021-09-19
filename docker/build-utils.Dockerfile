@@ -4,6 +4,9 @@ ARG CMAKE_VERSION=3.21.2
 ARG CMAKE_VERSION_SHORT=3.21
 ARG CLANG_VERSION=13
 
+ENV DEBIAN_FRONTEND="noninteractive" \
+    TZ="Europe/London"
+
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
