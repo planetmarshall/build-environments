@@ -15,7 +15,6 @@ RUN apt-get update && \
         libbz2-dev \
         libffi-dev \
         liblzma-dev \
-        libreadline-dev \
         libsqlite3-dev \
         libssl-dev \
         libxml2-dev \
