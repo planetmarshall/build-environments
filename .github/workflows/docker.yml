@@ -38,7 +38,9 @@ jobs:
         context: docker
         file: docker/build-utils.Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:latest
+        tags: | 
+          ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:latest
+          ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:${{ github.run_id }}
 
     - name: Build and export to Docker for testing
       uses: docker/build-push-action@v2
@@ -59,5 +61,7 @@ jobs:
         context: docker
         file: docker/hdf5.Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:latest
+        tags: | 
+          ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:latest
+          ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:${{ github.run_id }}
 
