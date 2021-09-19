@@ -31,7 +31,8 @@ jobs:
       with:
         context: docker
         file: docker/build-utils.Dockerfile
-        push: True
+        push: ${{ github.ref == 'refs/heads/main' }}
+        load: ${{ github.ref != 'refs/heads/main' }}
         tags: | 
           ${{ env.USERNAME }}/build-utils:latest
           ${{ env.USERNAME }}/build-utils:${{ github.run_number }}
@@ -42,7 +43,8 @@ jobs:
       with:
         context: docker
         file: docker/hdf5.Dockerfile
-        push: True
+        push: ${{ github.ref == 'refs/heads/main' }}
+        load: ${{ github.ref != 'refs/heads/main' }}
         tags: | 
           ${{ env.USERNAME }}/hdf5:latest
           ${{ env.USERNAME }}/hdf5:${{ github.run_number }}
