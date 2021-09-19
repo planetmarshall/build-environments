@@ -7,6 +7,9 @@ on:
     branches: main        
   workflow_dispatch:  
 
+env:
+  USERNAME: algodynamic
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,7 +23,7 @@ jobs:
     - name: Login to Docker Hub
       uses: docker/login-action@v1
       with:
-        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        username: ${{ env.USERNAME }}
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
     - name: Build and push build tools image
@@ -31,8 +34,8 @@ jobs:
         load: true
         push: ${{ github.ref == 'refs/heads/main' }}
         tags: | 
-          ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:latest
-          ${{ secrets.DOCKER_HUB_USERNAME }}/build-utils:${{ github.run_number }}
+          ${{ env.USERNAME }}/build-utils:latest
+          ${{ env.USERNAME }}/build-utils:${{ github.run_number }}
 
 
     - name: Build and push hdf5 image
@@ -43,10 +46,10 @@ jobs:
         load: true
         push: ${{ github.ref == 'refs/heads/main' }}
         tags: | 
-          ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:latest
-          ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:${{ github.run_number }}
+          ${{ env.USERNAME }}/hdf5:latest
+          ${{ env.USERNAME }}/hdf5:${{ github.run_number }}
 
     - name: Test hdf5 image
       run: |
-        docker run --rm ${{ secrets.DOCKER_HUB_USERNAME }}/hdf5:latest h5dump --version
+        docker run --rm ${{ env.USERNAME }}/hdf5:latest h5dump --version
 
