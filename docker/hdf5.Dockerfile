@@ -1,5 +1,7 @@
 ARG HDF5_VERSION=1_12_1
-FROM algodynamic/build-utils:latest AS build
+ARG BASE_TAG=latest
+ARG REGISTRY=docker.io
+FROM ${REGISTRY}/algodynamic/build-utils:${BASE_TAG} AS build
 ARG HDF5_VERSION
 
 RUN wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}.tar.gz -O /tmp/hdf5.tar.gz && \
