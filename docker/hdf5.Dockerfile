@@ -13,16 +13,14 @@ RUN wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}
     ninja && \
     cpack -G DEB -B /tmp -D CPACK_PACKAGING_INSTALL_PREFIX=/usr/local . 
 
-FROM ubuntu:20.04
+FROM ${REGISTRY}/algodynamic/ci-base:${BASE_TAG}
 ARG HDF5_VERSION=1.12.1
-ENV DEBIAN_FRONTEND="noninteractive" \
-    TZ="Europe/London"
 COPY --from=build /tmp/HDF5-${HDF5_VERSION}-Linux.deb /tmp/
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
-      python3 \
-      python3-pip \
+        python3 \
+        python3-pip \
     && \
     dpkg -i /tmp/HDF5-${HDF5_VERSION}-Linux.deb && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 100 && \

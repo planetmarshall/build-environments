@@ -7,7 +7,6 @@ on:
     branches: main        
   workflow_dispatch:
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -41,24 +40,38 @@ jobs:
         username: algodynamic
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
+    - name: Build and push ci-base image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: docker/ci-base.Dockerfile
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/algodynamic/ci-base:latest
+          ${{ env.REGISTRY }}/algodynamic/ci-base:${{ github.run_number }}
+
     - name: Build and push build tools image
       uses: docker/build-push-action@v2
       with:
         context: .
         file: docker/build-utils.Dockerfile
+        build-args: |
+          REGISTRY=${{ env.REGISTRY }}
+          BASE_TAG=${{ env.BASE_TAG }}
         push: true
         tags: |
           ${{ env.REGISTRY }}/algodynamic/build-utils:latest
           ${{ env.REGISTRY }}/algodynamic/build-utils:${{ github.run_number }}
-
 
     - name: Build and push hdf5 image
       uses: docker/build-push-action@v2
       with:
         context: .
         file: docker/hdf5.Dockerfile
+        build-args: |
+          REGISTRY=${{ env.REGISTRY }}
+          BASE_TAG=${{ env.BASE_TAG }}
         push: true
-        build-args: REGISTRY=${{ env.REGISTRY }}
         tags: |
           ${{ env.REGISTRY }}/algodynamic/hdf5:latest
           ${{ env.REGISTRY }}/algodynamic/hdf5:${{ github.run_number }}
