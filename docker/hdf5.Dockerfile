@@ -14,6 +14,7 @@ RUN wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}
 FROM ubuntu:20.04
 ARG HDF5_VERSION=1.12.1
 COPY --from=build /tmp/HDF5-${HDF5_VERSION}-Linux.deb /tmp/
-RUN dpkg -i /tmp/HDF5-${HDF5_VERSION}-Linux.deb
+RUN dpkg -i /tmp/HDF5-${HDF5_VERSION}-Linux.deb && \
+
 
     
