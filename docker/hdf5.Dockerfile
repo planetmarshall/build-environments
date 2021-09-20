@@ -23,6 +23,7 @@ RUN apt-get update && \
         python3-pip \
     && \
     dpkg -i /tmp/HDF5-${HDF5_VERSION}-Linux.deb && \
+    ldconfig && \
     update-alternatives --install /usr/bin/python python /usr/bin/python3 100 && \
     update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 100 && \
     pip3 install --upgrade \
