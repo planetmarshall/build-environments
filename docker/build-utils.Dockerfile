@@ -6,14 +6,12 @@ ARG CMAKE_VERSION_SHORT=3.21
 ENV DEBIAN_FRONTEND="noninteractive" \
     TZ="Europe/London"
 
-RUN add-apt-repository ppa:git-core/ppa && \
-    apt-get update && \
+RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
         curl \
-        git \
         gnupg \
         software-properties-common \
         libbz2-dev \
@@ -29,9 +27,11 @@ RUN add-apt-repository ppa:git-core/ppa && \
         wget \
         xz-utils \
         zlib1g-dev \
-        && \
+    && \
+    add-apt-repository ppa:git-core/ppa && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
     apt-get install -y --no-install-recommends \
+      git \
       git-lfs \
     && \
     wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-Linux-x86_64.tar.gz -O /tmp/cmake.tar.gz && \
