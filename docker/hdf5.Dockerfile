@@ -15,8 +15,20 @@ RUN wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}
 
 FROM ubuntu:20.04
 ARG HDF5_VERSION=1.12.1
+ENV DEBIAN_FRONTEND="noninteractive" \
+    TZ="Europe/London"
 COPY --from=build /tmp/HDF5-${HDF5_VERSION}-Linux.deb /tmp/
-RUN dpkg -i /tmp/HDF5-${HDF5_VERSION}-Linux.deb && \
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+      python3 \
+      python3-pip \
+    && \
+    dpkg -i /tmp/HDF5-${HDF5_VERSION}-Linux.deb && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3 100 && \
+    update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 100 && \
     pip3 install --upgrade \
         h5py \
-        numpy
+        numpy \
+    && \
+    rm -rf /tmp/*
