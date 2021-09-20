@@ -15,6 +15,6 @@ FROM ubuntu:20.04
 ARG HDF5_VERSION=1.12.1
 COPY --from=build /tmp/HDF5-${HDF5_VERSION}-Linux.deb /tmp/
 RUN dpkg -i /tmp/HDF5-${HDF5_VERSION}-Linux.deb && \
-
-
-    
+    pip3 install --upgrade \
+        h5py \
+        numpy
