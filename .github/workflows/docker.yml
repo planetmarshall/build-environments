@@ -10,6 +10,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ubuntu: ['18.04', '20.04']
     services:
       registry:
         image: registry:2
@@ -21,7 +24,6 @@ jobs:
 
     - name: Set registry name
       run: |
-        echo "BASE_TAG=${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
         if [ "${GITHUB_REF}" = "refs/heads/main" ]; then
           echo "REGISTRY=docker.io" >> $GITHUB_ENV
         else
@@ -46,9 +48,10 @@ jobs:
         context: .
         file: docker/ci-base.Dockerfile
         push: true
+        build-args: |
+          UBUNTU_VERSION=${{ matrix.ubuntu }}
         tags: |
-          ${{ env.REGISTRY }}/algodynamic/ci-base:latest
-          ${{ env.REGISTRY }}/algodynamic/ci-base:${{ github.run_number }}
+          ${{ env.REGISTRY }}/algodynamic/ci-base:${{ matrix.ubuntu }}
 
     - name: Build and push build tools image
       uses: docker/build-push-action@v2
@@ -57,11 +60,10 @@ jobs:
         file: docker/build-utils.Dockerfile
         build-args: |
           REGISTRY=${{ env.REGISTRY }}
-          BASE_TAG=${{ env.BASE_TAG }}
+          UBUNTU_VERSION=${{ matrix.ubuntu }}
         push: true
         tags: |
-          ${{ env.REGISTRY }}/algodynamic/build-utils:latest
-          ${{ env.REGISTRY }}/algodynamic/build-utils:${{ github.run_number }}
+          ${{ env.REGISTRY }}/algodynamic/build-utils:${{ matrix.ubuntu }}
 
     - name: Build and push hdf5 image
       uses: docker/build-push-action@v2
@@ -70,15 +72,14 @@ jobs:
         file: docker/hdf5.Dockerfile
         build-args: |
           REGISTRY=${{ env.REGISTRY }}
-          BASE_TAG=${{ env.BASE_TAG }}
+          UBUNTU_VERSION=${{ matrix.ubuntu }}
         push: true
         tags: |
-          ${{ env.REGISTRY }}/algodynamic/hdf5:latest
-          ${{ env.REGISTRY }}/algodynamic/hdf5:${{ github.run_number }}
+          ${{ env.REGISTRY }}/algodynamic/hdf5:${{ matrix.ubuntu }}
 
     - name: Test hdf5 image
       run: |
-        docker run --rm ${REGISTRY}/algodynamic/hdf5:${BASE_TAG} h5dump --version
+        docker run --rm ${REGISTRY}/algodynamic/hdf5:${{ matrix.ubuntu }} h5dump --version
 
     - name: Build and push ubuntu-dev image
       uses: docker/build-push-action@v2
@@ -87,8 +88,7 @@ jobs:
         file: docker/ubuntu-dev.Dockerfile
         build-args: |
           REGISTRY=${{ env.REGISTRY }}
-          BASE_TAG=${{ env.BASE_TAG }}
+          UBUNTU_VERSION=${{ matrix.ubuntu }}
         push: true
         tags: |
-          ${{ env.REGISTRY }}/algodynamic/ubuntu-dev:latest
-          ${{ env.REGISTRY }}/algodynamic/ubuntu-dev:${{ github.run_number }}
+          ${{ env.REGISTRY }}/algodynamic/ubuntu-dev:${{ matrix.ubuntu }}
