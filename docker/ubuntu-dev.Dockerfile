@@ -1,0 +1,5 @@
+ARG UBUNTU_VERSION=18.04
+ARG REGISTRY=docker.io
+FROM ${REGISTRY}/algodynamic/hdf5:${UBUNTU_VERSION}
+
+

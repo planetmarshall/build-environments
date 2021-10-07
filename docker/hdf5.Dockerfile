@@ -1,7 +1,7 @@
 ARG HDF5_VERSION=1_12_1
-ARG BASE_TAG=latest
+ARG UBUNTU_VERSION=20.04
 ARG REGISTRY=docker.io
-FROM ${REGISTRY}/algodynamic/build-utils:${BASE_TAG} AS build
+FROM ${REGISTRY}/algodynamic/build-utils:${UBUNTU_VERSION} AS build
 ARG HDF5_VERSION
 
 RUN wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}.tar.gz -O /tmp/hdf5.tar.gz && \
@@ -13,7 +13,7 @@ RUN wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}
     ninja && \
     cpack -G DEB -B /tmp -D CPACK_PACKAGING_INSTALL_PREFIX=/usr/local . 
 
-FROM ${REGISTRY}/algodynamic/ci-base:${BASE_TAG}
+FROM ${REGISTRY}/algodynamic/ci-base:${UBUNTU_VERSION}
 ARG HDF5_VERSION=1.12.1
 COPY --from=build /tmp/HDF5-${HDF5_VERSION}-Linux.deb /tmp/
 RUN apt-get update && \

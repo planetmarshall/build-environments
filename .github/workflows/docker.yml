@@ -79,3 +79,16 @@ jobs:
     - name: Test hdf5 image
       run: |
         docker run --rm ${REGISTRY}/algodynamic/hdf5:${BASE_TAG} h5dump --version
+
+    - name: Build and push ubuntu-dev image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: docker/ubuntu-dev.Dockerfile
+        build-args: |
+          REGISTRY=${{ env.REGISTRY }}
+          BASE_TAG=${{ env.BASE_TAG }}
+        push: true
+        tags: |
+          ${{ env.REGISTRY }}/algodynamic/ubuntu-dev:latest
+          ${{ env.REGISTRY }}/algodynamic/ubuntu-dev:${{ github.run_number }}
