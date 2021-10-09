@@ -30,4 +30,5 @@ RUN apt-get update && \
         h5py \
         numpy \
     && \
-    rm -rf /tmp/*
+    rm -rf /tmp/* && \
+    apt-get clean
