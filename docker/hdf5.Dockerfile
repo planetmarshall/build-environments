@@ -9,7 +9,10 @@ RUN wget https://github.com/HDFGroup/hdf5/archive/refs/tags/hdf5-${HDF5_VERSION}
     tar -xf hdf5.tar.gz && \
     mkdir -p hdf5-hdf5-${HDF5_VERSION}/build && \
     cd hdf5-hdf5-${HDF5_VERSION}/build && \
-    cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja && \
+    cmake .. \
+        -DCMAKE_BUILD_TYPE=Release \
+        -DHDF5_ENABLE_Z_LIB_SUPPORT=ON \
+        -G Ninja && \
     ninja && \
     cpack -G DEB -B /tmp -D CPACK_PACKAGING_INSTALL_PREFIX=/usr/local . 
 
