@@ -13,6 +13,7 @@ RUN apt-get update && \
         gnupg \
         software-properties-common \
         wget \
+        zlib1g-dev \
     && \
     add-apt-repository ppa:git-core/ppa && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash && \
